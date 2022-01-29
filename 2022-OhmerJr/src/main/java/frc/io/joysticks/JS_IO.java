@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 //Declares all joysticks, buttons, axis & pov's.
 public class JS_IO {
-    public static int jsConfig = 1; // 0=Joysticks, 1=gamePad only, 2=left Joystick only
+    public static int jsConfig = 0; // 0=Joysticks, 1=gamePad only, 2=left Joystick only
                                     // 3=Mixed LJS & GP, 4=Nintendo Pad
     // Declare all possible Joysticks
     public static Joystick leftJoystick = new Joystick(0);  // Left JS

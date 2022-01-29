@@ -19,13 +19,13 @@ public class Drv_Auto extends Drive {
      * <p>Reset Heading & Distance to 0.
      */
     public static void init() {
-        traj = Trajectories.getTraj(1.0);
+        traj = Trajectories.getTraj(0.5);
         autoStep = 0;
         idx = 0;
         allDone = false;
         hdgRst();
         distRst();
-        IO.resetCoor();
+        IO.coorReset();
         Drive.init();
 
         System.out.println("Auto - Init");

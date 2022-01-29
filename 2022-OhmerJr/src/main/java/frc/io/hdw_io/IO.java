@@ -1,6 +1,7 @@
 package frc.io.hdw_io;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
@@ -11,8 +12,8 @@ public class IO {
     // Drive
     public static WPI_TalonSRX drvTSRX_L = new WPI_TalonSRX(56); // Cmds left wheels. Includes encoders
     public static WPI_TalonSRX drvTSRX_R = new WPI_TalonSRX(57); // Cmds right wheels. Includes encoders
-    public static final double drvTPF_L = 385.40; // 1024 t/r (0.5' * 3.14)/r 9:60 gr
-    public static final double drvTPF_R = 385.40; // 1024 t/r (0.5' * 3.14)/r 9:60 gr
+    public static final double drvTPF_L = 433.20; // 1024 t/r (0.5' * 3.14)/r 9:60 gr
+    public static final double drvTPF_R = 433.20; // 1024 t/r (0.5' * 3.14)/r 9:60 gr
     public static Encoder drvEnc_L = new Encoder(drvTSRX_L, drvTPF_L);  //Interface for feet, ticks, reset
     public static Encoder drvEnc_R = new Encoder(drvTSRX_R, drvTPF_R);
     public static void drvFeetRst() { drvEnc_L.reset(); drvEnc_R.reset(); }
@@ -25,17 +26,18 @@ public class IO {
     public static NavX navX = new NavX();
 
     // PDP
-    public static PowerDistribution pdp = new PowerDistribution(21,ModuleType.kCTRE);
+    public static PowerDistribution pdp = new PowerDistribution(0,ModuleType.kCTRE);
 
     // Initialize any hardware here
     public static void init() {
         drvsInit();
+        SmartDashboard.putBoolean("Coor/Reset", false);
     }
 
     public static void drvsInit() {
         drvTSRX_L.configFactoryDefault();
         drvTSRX_R.configFactoryDefault();
-        drvTSRX_L.setInverted(false); // Inverts motor direction and encoder if attached
+        drvTSRX_L.setInverted(true); // Inverts motor direction and encoder if attached
         drvTSRX_R.setInverted(false); // Inverts motor direction and encoder if attached
         drvTSRX_L.setSensorPhase(false); // Adjust this to correct phasing with motor
         drvTSRX_R.setSensorPhase(false); // Adjust this to correct phasing with motor
@@ -44,8 +46,18 @@ public class IO {
     }
 
     public static void update() {
-
+        coorUpdate();
+        
+        SmartDashboard.putNumber("Coor/X", coorX);
+        SmartDashboard.putNumber("Coor/Y", coorY);
+        SmartDashboard.putNumber("Coor/EncoderL", drvTSRX_L.getSelectedSensorPosition());
+        SmartDashboard.putNumber("Coor/EncoderR", drvTSRX_R.getSelectedSensorPosition());
+        if (SmartDashboard.getBoolean("Coor/Reset", false)) {
+            coorReset();
+            SmartDashboard.putBoolean("Coor/Reset", false);
+        }
     }
+
 
     //--------------------  XY Coordinates -----------------------------------
     private static double prstDist;     //Present distance traveled since last reset.
@@ -78,16 +90,20 @@ public class IO {
     /**Reset the location on the field to 0.0, 0.0.
      * If needed navX.Reset must be called separtely.
      */
-    public static void resetCoor(){
+    public static void coorReset(){
         // IO.navX.reset();
-        // encL.reset();
-        // encR.reset();
+        drvEnc_L.reset();
+        drvEnc_R.reset();
         coorX = 0;
         coorY = 0;
-        prstDist = (drvEnc_L.feet() + drvEnc_R.feet())/2;
+        prstDist =
+        
+         (drvEnc_L.feet() + drvEnc_R.feet())/2;
         prvDist = prstDist;
+        
         deltaD = 0;
     }
+    
 
     /**
      * @return an array of the calculated X and Y coordinate on the field since the last reset.

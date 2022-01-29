@@ -11,7 +11,7 @@ public class Trajectories {
     private static String[] chsrDesc = {
         "getEmpty", "getCargo1"
     };
-
+    
     /**Initialize Traj chooser */
     public static void chsrInit(){
         for(int i = 0; i < chsrDesc.length; i++){
@@ -70,15 +70,20 @@ public class Trajectories {
 
     public static ATrajFunction[] getCargo1(double pwr) {
         ATrajFunction traj[] = {
-            new TurnNMove(0,    2.5, pwr), 
-            new TurnNMove(-55, 5.17, pwr), 
-            new TurnNMove(0,    8.5, pwr),
-            new TurnNMove(57,   3.2, pwr),
-            new TankTurnHdg(135, 0.0,  0.80),
-            new TurnNMove(132,  5.0, pwr),
-            new TurnNMove(180,  8.5, pwr), 
-            new TurnNMove(-125,4.57, pwr),
-            new TurnNMove(180,  2.0, pwr)
+            new MoveOnHdg(0  , 15, pwr), // Moves 10 ft
+            new MoveOnHdg(0  ,-0.2,pwr), // Brakes      
+            new TurnNMove(-90  , 10, pwr/2), // Turns and Moves 10 ft
+            new MoveOnHdg(-90  ,-0.2,pwr), // Brakes
+
+            // new TurnNMove(0,    2.5, pwr),
+            // new TurnNMove(-55, 5.17, pwr),
+            // new TurnNMove(0,    8.5, pwr),
+            // new TurnNMove(57,   3.2, pwr),
+            // new TankTurnHdg(135, 0.0,  0.80),
+            // new TurnNMove(132,  5.0, pwr),
+            // new TurnNMove(180,  8.5, pwr),
+            // new TurnNMove(-125,4.57, pwr),
+            // new TurnNMove(180,  2.0, pwr),
         };
         return traj;
     }
