@@ -37,8 +37,8 @@ public class IO {
     public static void drvsInit() {
         drvTSRX_L.configFactoryDefault();
         drvTSRX_R.configFactoryDefault();
-        drvTSRX_L.setInverted(true); // Inverts motor direction and encoder if attached
-        drvTSRX_R.setInverted(false); // Inverts motor direction and encoder if attached
+        drvTSRX_L.setInverted(false); // Inverts motor direction and encoder if attached
+        drvTSRX_R.setInverted(true); // Inverts motor direction and encoder if attached
         drvTSRX_L.setSensorPhase(false); // Adjust this to correct phasing with motor
         drvTSRX_R.setSensorPhase(false); // Adjust this to correct phasing with motor
         drvTSRX_L.setNeutralMode(NeutralMode.Brake); // change it back

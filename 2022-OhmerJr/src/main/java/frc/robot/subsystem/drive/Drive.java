@@ -85,6 +85,7 @@ public class Drive {
             diffDrv.tankDrive(0.0, 0.0, false);
             break;
             case 1:     //Tank
+            System.out.println("Here: " + lSpdY + " " + rSpdRot_XY);
             diffDrv.tankDrive(-lSpdY, -rSpdRot_XY, isSqOrQT);
             break;
             case 2:     //Arcade

@@ -9,7 +9,7 @@ public class Trajectories {
     private static double dfltPwr = 0.9;
     private static SendableChooser<String> chsr = new SendableChooser<String>();
     private static String[] chsrDesc = {
-        "getEmpty", "getCargo1"
+        "getEmpty", "getCargo1", "getCargo2"
     };
     
     /**Initialize Traj chooser */
@@ -38,6 +38,8 @@ public class Trajectories {
             return getEmpty(pwr);
             case "getCargo1":
             return getCargo1(pwr);
+            case "getCargo2":
+            return getCargo2(pwr);
             default:
             System.out.println("Traj/Bad Traj Desc - " + chsr.getSelected());
             return getEmpty(0);
@@ -70,22 +72,20 @@ public class Trajectories {
 
     public static ATrajFunction[] getCargo1(double pwr) {
         ATrajFunction traj[] = {
-            new MoveOnHdg(0  , 15, pwr), // Moves 10 ft
-            new MoveOnHdg(0  ,-0.2,pwr), // Brakes      
-            new TurnNMove(-90  , 10, pwr/2), // Turns and Moves 10 ft
+            new MoveOnHdg(0  , 15, pwr), // Moves 15 ft
+            new MoveOnHdg(0  ,-0.2,pwr), // Brakes
+            new TankTurnHdg(-90, 0.65, -0.65), //Turns
+            new MoveOnHdg(-90, 10, pwr), //Moves
             new MoveOnHdg(-90  ,-0.2,pwr), // Brakes
-
-            // new TurnNMove(0,    2.5, pwr),
-            // new TurnNMove(-55, 5.17, pwr),
-            // new TurnNMove(0,    8.5, pwr),
-            // new TurnNMove(57,   3.2, pwr),
-            // new TankTurnHdg(135, 0.0,  0.80),
-            // new TurnNMove(132,  5.0, pwr),
-            // new TurnNMove(180,  8.5, pwr),
-            // new TurnNMove(-125,4.57, pwr),
-            // new TurnNMove(180,  2.0, pwr),
         };
         return traj;
     }
-
+    public static ATrajFunction[] getCargo2(double pwr) {
+        ATrajFunction traj[] = {
+            new Waypt(0, 15, pwr, 5),
+            new Waypt(-10, 15, pwr, 5),
+        };
+        System.out.println("HEre2: ");
+        return traj;
+    }
 }
