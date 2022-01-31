@@ -14,8 +14,8 @@ public class IO {
     public static WPI_TalonSRX drvTSRX_R = new WPI_TalonSRX(57); // Cmds right wheels. Includes encoders
     public static final double drvTPF_L = 433.20; // 1024 t/r (0.5' * 3.14)/r 9:60 gr
     public static final double drvTPF_R = 433.20; // 1024 t/r (0.5' * 3.14)/r 9:60 gr
-    public static Encoder drvEnc_L = new Encoder(drvTSRX_L, drvTPF_L);  //Interface for feet, ticks, reset
-    public static Encoder drvEnc_R = new Encoder(drvTSRX_R, drvTPF_R);
+    public static Whl_Encoder drvEnc_L = new Whl_Encoder(drvTSRX_L, drvTPF_L);  //Interface for feet, ticks, reset
+    public static Whl_Encoder drvEnc_R = new Whl_Encoder(drvTSRX_R, drvTPF_R);
     public static void drvFeetRst() { drvEnc_L.reset(); drvEnc_R.reset(); }
     public static double drvFeet() { return (drvEnc_L.feet() + drvEnc_R.feet()) / 2.0; }
 
@@ -56,6 +56,11 @@ public class IO {
             coorReset();
             SmartDashboard.putBoolean("Coor/Reset", false);
         }
+        SmartDashboard.putNumber("NavX/Heading A", navX.getAngle());  //Z continueous
+        SmartDashboard.putNumber("NavX/Heading Y", navX.getYaw());    //Z -180 to 180
+        SmartDashboard.putNumber("NavX/Heading Z", navX.getRawGyroZ());//Z raw vel deg/sec
+        SmartDashboard.putNumber("NavX/Heading A", navX.getPitch());  //X? -180 to 180
+        SmartDashboard.putNumber("NavX/Heading Y", navX.getRoll());   //X? -180 to 180
     }
 
 
