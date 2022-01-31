@@ -5,13 +5,13 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.math.util.Units;
 
-public class Encoder {
+public class Whl_Encoder {
 
     private WPI_TalonSRX talonCtlr;
     private double tpf;
 
     /**Interface to Talon encoders */
-    public Encoder(WPI_TalonSRX escPort, double _tpf){
+    public Whl_Encoder(WPI_TalonSRX escPort, double _tpf){
         talonCtlr = escPort;
         tpf = _tpf;
     }
