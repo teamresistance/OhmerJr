@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.SPI;
 /**
  * Constructor for a Kauailabs navX, gyro, object.
  */
-public class NavX {
+public class NavX extends AHRS {
 	/**
 	 * Declare a variable using SPI connector
 	 */
@@ -22,9 +22,9 @@ public class NavX {
 	/**
 	 * @return raw Z position.  No limit, +/-360 (or +/-180).
 	 */
-	public double getAngle() {
-		return ahrs.getAngle();
-	}
+	// public double getAngle() {
+	// 	return ahrs.getAngle();
+	// }
 
 	/**
 	 * @param angle to be normalized 0 to 360.
@@ -67,15 +67,41 @@ public class NavX {
 	/**
 	 * Set navX z position, gyro, to 0 degrees.
 	 */
-	public void reset() {
-		ahrs.reset();
-	}
+	// public void reset() {
+	// 	ahrs.reset();
+	// }
 
 	/**
 	 * @return navX ID object variable(?).
 	 */
-	public AHRS getAHRS() {
-		return ahrs;
-	}
+	// public AHRS getAHRS() {
+	// 	return ahrs;
+	// }
+
+	/**
+	 * @return current pitch value (in degrees, from -180 to 180)
+	 * reported by the sensor. Pitch is a measure of rotation around the X Axis.
+	 */
+	// public float getPitch() {
+	// 	return ahrs.getPitch();
+	// }
+
+	/**
+	 * @return current roll value (in degrees, from -180 to 180)
+	 * reported by the sensor. Roll is a measure of rotation around the X Axis.
+	 */
+	// public float getRoll() {
+	// 	return ahrs.getRoll();
+	// }
+
+	/**
+	 * @return current roll value (in degrees, from -180 to 180)
+	 * reported by the sensor. Roll is a measure of rotation around the X Axis.
+	 */
+	// public double getOther() {
+	// 	return ahrs.getRoll();
+	// }
+
+
 
 }
