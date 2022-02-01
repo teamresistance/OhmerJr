@@ -31,7 +31,13 @@ public class IO {
     // Initialize any hardware here
     public static void init() {
         drvsInit();
-        SmartDashboard.putBoolean("Coor/Reset", false);
+        sdbInit();
+    }
+
+    // Update any hardware here
+    public static void update() {
+        coorUpdate();
+        sdbUpdate();
     }
 
     public static void drvsInit() {
@@ -45,9 +51,12 @@ public class IO {
         drvTSRX_R.setNeutralMode(NeutralMode.Brake); // change it back
     }
 
-    public static void update() {
-        coorUpdate();
-        
+    public static void sdbInit() {
+        SmartDashboard.putBoolean("Coor/Reset", false);
+        SmartDashboard.putNumber("NavX/Angle Adj", 0);
+    }
+
+    public static void sdbUpdate() {
         SmartDashboard.putNumber("Coor/X", coorX);
         SmartDashboard.putNumber("Coor/Y", coorY);
         SmartDashboard.putNumber("Coor/EncoderL", drvTSRX_L.getSelectedSensorPosition());
@@ -56,11 +65,12 @@ public class IO {
             coorReset();
             SmartDashboard.putBoolean("Coor/Reset", false);
         }
-        SmartDashboard.putNumber("NavX/Heading A", navX.getAngle());  //Z continueous
-        SmartDashboard.putNumber("NavX/Heading Y", navX.getYaw());    //Z -180 to 180
-        SmartDashboard.putNumber("NavX/Heading Z", navX.getRawGyroZ());//Z raw vel deg/sec
-        SmartDashboard.putNumber("NavX/Heading A", navX.getPitch());  //X? -180 to 180
-        SmartDashboard.putNumber("NavX/Heading Y", navX.getRoll());   //X? -180 to 180
+        SmartDashboard.putNumber("NavX/Heading Angle", navX.getAngle());  //Z continueous
+        SmartDashboard.putNumber("NavX/Heading Yaw", navX.getYaw());    //Z -180 to 180
+        SmartDashboard.putNumber("NavX/Heading Raw Z", navX.getRawGyroZ());//Z raw vel deg/sec
+        SmartDashboard.putNumber("NavX/Pitch", navX.getPitch());  //X? -180 to 180
+        SmartDashboard.putNumber("NavX/Roll", navX.getRoll());   //X? -180 to 180
+        navX.setAngleAdjustment(SmartDashboard.getNumber("NavX/Angle Adj", 0));
     }
 
 
@@ -70,6 +80,8 @@ public class IO {
     private static double deltaD;       //Distance traveled during this period.
     private static double coorX = 0;    //Calculated X (Left/Right) coordinate on field
     private static double coorY = 0;    //Calculated Y (Fwd/Bkwd) coordinate on field.
+    private static double coorX_OS = 0; //X offset.  Added to coorX before returning getCoor
+    private static double coorY_OS = 0; //Y offset.  Added to coorY before returning getCoor
     
     /**Calculates the XY coordinates by taken the delta distance and applying the sinh/cosh 
      * of the gyro heading.
@@ -87,8 +99,8 @@ public class IO {
         if (Math.abs(deltaD) > 0.2) deltaD = 0.0;       //Skip this update if too large.
 
         if (Math.abs(deltaD) > 0.0){    //Deadband for encoders if needed (vibration?).  Presently set to 0.0
-            coorY += deltaD * Math.cos(Math.toRadians(IO.navX.getAngle())) * 1.0;
-            coorX += deltaD * Math.sin(Math.toRadians(IO.navX.getAngle())) * 1.1;
+            coorY += deltaD * Math.cos(Math.toRadians(navX.getAngle())) * 1.0;
+            coorX += deltaD * Math.sin(Math.toRadians(navX.getAngle())) * 1.1;
         }
     }
 
@@ -101,20 +113,35 @@ public class IO {
         drvEnc_R.reset();
         coorX = 0;
         coorY = 0;
-        prstDist =
-        
-         (drvEnc_L.feet() + drvEnc_R.feet())/2;
+        prstDist = (drvEnc_L.feet() + drvEnc_R.feet())/2;
         prvDist = prstDist;
         
         deltaD = 0;
     }
     
+    /**
+     * @param x Value to added to coorX before returning getCoorXY.
+     * @param y Value to added to coorY before returning getCoorXY.
+     */
+    public static void setCoorXY_OS(double x, double y){coorX_OS = x;   coorY_OS = y;}
+    /**
+     * @param xy Values to added to coorX, [0] & Y [1] before returning getCoorXY.
+     */
+    public static void setCoorXY_OS(double[] xy){coorX_OS = xy[0];   coorY_OS = xy[1];}
+    /**
+     * @param x Value to added to coorX before returning getCoorXY.
+     */
+    public static void setCoorX_OS(double x){coorX_OS = x;}
+    /**
+     * @param x Value to added to coorX before returning getCoorXY.
+     */
+    public static void setCoorY_OS(double y){coorY_OS = y;}
 
     /**
      * @return an array of the calculated X and Y coordinate on the field since the last reset.
      */
     public static double[] getCoor(){
-        double[] coorXY = {coorX, coorY};
+        double[] coorXY = {coorX + coorX_OS, coorY + coorY_OS};
         return coorXY;
     }
 
@@ -122,14 +149,14 @@ public class IO {
      * @return the calculated X (left/right) coordinate on the field since the last reset.
      */
     public static double getCoorX(){
-        return coorX;
+        return coorX + coorX_OS;
     }
 
     /**
      * @return the calculated Y (fwd/bkwd) coordinate on the field since the last reset.
      */
     public static double getCoorY(){
-        return coorY;
+        return coorY + coorY_OS;
     }
 
     /**
