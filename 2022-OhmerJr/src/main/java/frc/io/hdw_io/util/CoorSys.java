@@ -12,8 +12,8 @@ public class CoorSys {
     private double deltaD;       //Distance traveled during this period.
     private double coorX = 0;    //Calculated X (Left/Right) coordinate on field
     private double coorY = 0;    //Calculated Y (Fwd/Bkwd) coordinate on field.
-    private double coorX_OS = 0; //X offset.  Added to coorX before returning getCoor
-    private double coorY_OS = 0; //Y offset.  Added to coorY before returning getCoor
+    private double coorX_OS = 0; //X offset.  Added to coorX before returning getX
+    private double coorY_OS = 0; //Y offset.  Added to coorY before returning getY
 
     /**
      * Constructor to use navX and wheel encoders to calc distance & XY coordinates.
@@ -27,21 +27,17 @@ public class CoorSys {
         whlEnc_R = right;
     }
 
-    /**Reset left & right encoders to 0.  Feet calc reads 0 */
-    public void drvFeetRst() { whlEnc_L.reset(); whlEnc_R.reset(); }
-    /**Use L/R encoders to calc average distance */
-    public double drvFeet() { return (whlEnc_L.feet() + whlEnc_R.feet()) / 2.0; }
-
-    /**Calculates the XY coordinates by taken the delta distance and applying the sinh/cosh 
+    /**
+     * Calculates the XY coordinates by taken the delta distance and applying the sinh/cosh 
      * of the gyro heading.
      * <p>Initialize by calling resetLoc.
      * <p>Needs to be called periodically from IO.update called in robotPeriodic in Robot.
      */
     public void update(){
         // prstDist = (drvEnc_L.feet() + drvEnc_R.feet())/2;   //Distance since last reset.
-        prstDist = drvFeet();   //Distance since last reset.
-        deltaD = prstDist - prvDist;                        //Distancce this pass
-        prvDist = prstDist;                                 //Save for next pass
+        prstDist = drvFeet();           //Distance since last reset.
+        deltaD = prstDist - prvDist;    //Distancce this pass
+        prvDist = prstDist;             //Save for next pass
 
         //If encoders are reset by another method, may cause large deltaD.
         //During testing deltaD never exceeded 0.15 on a 20mS update.
@@ -53,16 +49,20 @@ public class CoorSys {
         }
     }
 
+    /**Reset left & right encoders to 0.  Feet calc reads 0 */
+    public void drvFeetRst() { whlEnc_L.reset(); whlEnc_R.reset(); }
+    /**Use L/R encoders to calc average distance */
+    public double drvFeet() { return (whlEnc_L.feet() + whlEnc_R.feet()) / 2.0; }
+
     /**Reset the location on the field to 0.0, 0.0.
-     * If needed navX.Reset must be called separtely.
+     * <p>If needed navX.Reset must be called separtely.
      */
     public void reset(){
         // IO.navX.reset();
-        whlEnc_L.reset();
-        whlEnc_R.reset();
-        coorX = 0;
-        coorY = 0;
-        prstDist = (whlEnc_L.feet() + whlEnc_R.feet())/2;
+        drvFeetRst();       //Resets encoders to 0
+        coorX = -coorX_OS;  //getX() returns 0
+        coorY = -coorY_OS;  //getY() returns 0
+        prstDist = drvFeet();
         prvDist = prstDist;
         
         deltaD = 0;
@@ -73,46 +73,32 @@ public class CoorSys {
      * @param y Value to added to coorY before returning getCoorXY.
      */
     public void setXY_OS(double x, double y){coorX_OS = x;   coorY_OS = y;}
-    /**
-     * @param xy Values to added to coorX, [0] & Y [1] before returning getCoorXY.
-     */
+
+    /** @param xy Values to added to coorX, [0] & Y [1] before returning getCoorXY. */
     public void setXY_OS(double[] xy){coorX_OS = xy[0];   coorY_OS = xy[1];}
-    /**
-     * @param x Value to added to coorX before returning getCoorXY.
-     */
+
+    /** @param x Value to added to coorX before returning getCoorXY. */
     public void setX_OS(double x){coorX_OS = x;}
-    /**
-     * @param x Value to added to coorX before returning getCoorXY.
-     */
+
+    /** @param x Value to added to coorX before returning getCoorXY. */
     public void setY_OS(double y){coorY_OS = y;}
 
-    /**
-     * @return an array of the calculated X and Y coordinates on the field since the last reset.
-     */
+    /** @return an array of the calculated X and Y coordinates on the field since the last reset. */
     public double[] get(){
         double[] coorXY = {coorX + coorX_OS, coorY + coorY_OS};
         return coorXY;
     }
 
-    /**
-     * @return the calculated X (left/right) coordinate on the field since the last reset.
-     */
-    public double getX(){
-        return coorX + coorX_OS;
-    }
+    /** @return the calculated X (left/right) coordinate on the field since the last reset. */
+    public double getX(){ return coorX + coorX_OS; }
 
-    /**
-     * @return the calculated Y (fwd/bkwd) coordinate on the field since the last reset.
-     */
-    public double getY(){
-        return coorY + coorY_OS;
-    }
+    /** @return the calculated Y (fwd/bkwd) coordinate on the field since the last reset. */
+    public double getY(){ return coorY + coorY_OS; }
 
-    /**
-     * @return the calculated Y (fwd/bkwd) coordinate on the field since the last reset.
-     */
-    public double getDeltaD(){
-        return deltaD;
-    }
+    /** @return the calculated Y (fwd/bkwd) coordinate on the field since the last reset. */
+    public double getDeltaD(){ return deltaD; }
+
+    /** @return The average distance in feet since last reset. */
+    public double getDrvFeet(){ return prstDist; }
 
 }
