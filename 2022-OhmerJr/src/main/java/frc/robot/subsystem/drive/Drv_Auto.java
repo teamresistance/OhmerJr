@@ -25,7 +25,7 @@ public class Drv_Auto extends Drive {
         allDone = false;
         hdgRst();
         distRst();
-        IO.coorReset();
+        IO.coorXY.reset();
         Drive.init();
 
         System.out.println("Auto - Init");
@@ -54,7 +54,10 @@ public class Drv_Auto extends Drive {
             autoStep++;
         case 2:                 //Closeout Leg
             System.out.print("DONE Auto: ");
-            System.out.println("\tCoorX: " + IO.getCoorX() + "\tCoorY " + IO.getCoorY() + "\tHdg " + hdgFB() + "\tDist: " + IO.drvFeet());
+            System.out.println("\tHdg " + hdgFB() +
+                               "\tCoorX: " + IO.coorXY.getX() +
+                               "\tCoorY: " + IO.coorXY.getY() +
+                               "\tDist: " + IO.coorXY.drvFeet());
 
             cmdUpdate();        //Stop motors --added to stop after each leg
             idx++;
