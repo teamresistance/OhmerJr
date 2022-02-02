@@ -1,10 +1,10 @@
 package frc.robot.subsystem;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.io.hdw_io.Whl_Encoder;
 import frc.io.hdw_io.IO;
+import frc.io.hdw_io.util.Whl_Encoder;
 import frc.io.joysticks.JS_IO;
-import frc.io.joysticks.Button;
+import frc.io.joysticks.util.Button;
 import frc.util.Timer;
 
 public class ZZ_Template {

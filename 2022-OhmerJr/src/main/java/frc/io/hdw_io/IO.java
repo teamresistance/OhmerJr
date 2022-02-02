@@ -2,6 +2,9 @@ package frc.io.hdw_io;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.io.hdw_io.util.CoorSys;
+import frc.io.hdw_io.util.NavX;
+import frc.io.hdw_io.util.Whl_Encoder;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
@@ -16,14 +19,13 @@ public class IO {
     public static final double drvTPF_R = 433.20; // 1024 t/r (0.5' * 3.14)/r 9:60 gr
     public static Whl_Encoder drvEnc_L = new Whl_Encoder(drvTSRX_L, drvTPF_L);  //Interface for feet, ticks, reset
     public static Whl_Encoder drvEnc_R = new Whl_Encoder(drvTSRX_R, drvTPF_R);
-    public static void drvFeetRst() { drvEnc_L.reset(); drvEnc_R.reset(); }
-    public static double drvFeet() { return (drvEnc_L.feet() + drvEnc_R.feet()) / 2.0; }
 
     // Assignments used by DiffDrv. Slaves sent same command.  Slaves set to follow Masters in IO.
     public static DifferentialDrive diffDrv_M = new DifferentialDrive(IO.drvTSRX_L, IO.drvTSRX_R);
 
     // navX
     public static NavX navX = new NavX();
+    public static CoorSys coorXY = new CoorSys(navX, drvEnc_L, drvEnc_R);
 
     // PDP
     public static PowerDistribution pdp = new PowerDistribution(0,ModuleType.kCTRE);
@@ -36,7 +38,7 @@ public class IO {
 
     // Update any hardware here
     public static void update() {
-        coorUpdate();
+        coorXY.update();
         sdbUpdate();
     }
 
@@ -57,12 +59,12 @@ public class IO {
     }
 
     public static void sdbUpdate() {
-        SmartDashboard.putNumber("Coor/X", coorX);
-        SmartDashboard.putNumber("Coor/Y", coorY);
+        SmartDashboard.putNumber("Coor/X", coorXY.getX());
+        SmartDashboard.putNumber("Coor/Y", coorXY.getY());
         SmartDashboard.putNumber("Coor/EncoderL", drvTSRX_L.getSelectedSensorPosition());
         SmartDashboard.putNumber("Coor/EncoderR", drvTSRX_R.getSelectedSensorPosition());
         if (SmartDashboard.getBoolean("Coor/Reset", false)) {
-            coorReset();
+            coorXY.reset();
             SmartDashboard.putBoolean("Coor/Reset", false);
         }
         SmartDashboard.putNumber("NavX/Heading Angle", navX.getAngle());  //Z continueous
@@ -73,96 +75,4 @@ public class IO {
         navX.setAngleAdjustment(SmartDashboard.getNumber("NavX/Angle Adj", 0));
     }
 
-
-    //--------------------  XY Coordinates -----------------------------------
-    private static double prstDist;     //Present distance traveled since last reset.
-    private static double prvDist;      //previous distance traveled since last reset.
-    private static double deltaD;       //Distance traveled during this period.
-    private static double coorX = 0;    //Calculated X (Left/Right) coordinate on field
-    private static double coorY = 0;    //Calculated Y (Fwd/Bkwd) coordinate on field.
-    private static double coorX_OS = 0; //X offset.  Added to coorX before returning getCoor
-    private static double coorY_OS = 0; //Y offset.  Added to coorY before returning getCoor
-    
-    /**Calculates the XY coordinates by taken the delta distance and applying the sinh/cosh 
-     * of the gyro heading.
-     * <p>Initialize by calling resetLoc.
-     * <p>Needs to be called periodically from IO.update called in robotPeriodic in Robot.
-     */
-    public static void coorUpdate(){
-        // prstDist = (drvEnc_L.feet() + drvEnc_R.feet())/2;   //Distance since last reset.
-        prstDist = drvFeet();   //Distance since last reset.
-        deltaD = prstDist - prvDist;                        //Distancce this pass
-        prvDist = prstDist;                                 //Save for next pass
-
-        //If encoders are reset by another method, may cause large deltaD.
-        //During testing deltaD never exceeded 0.15 on a 20mS update.
-        if (Math.abs(deltaD) > 0.2) deltaD = 0.0;       //Skip this update if too large.
-
-        if (Math.abs(deltaD) > 0.0){    //Deadband for encoders if needed (vibration?).  Presently set to 0.0
-            coorY += deltaD * Math.cos(Math.toRadians(navX.getAngle())) * 1.0;
-            coorX += deltaD * Math.sin(Math.toRadians(navX.getAngle())) * 1.1;
-        }
-    }
-
-    /**Reset the location on the field to 0.0, 0.0.
-     * If needed navX.Reset must be called separtely.
-     */
-    public static void coorReset(){
-        // IO.navX.reset();
-        drvEnc_L.reset();
-        drvEnc_R.reset();
-        coorX = 0;
-        coorY = 0;
-        prstDist = (drvEnc_L.feet() + drvEnc_R.feet())/2;
-        prvDist = prstDist;
-        
-        deltaD = 0;
-    }
-    
-    /**
-     * @param x Value to added to coorX before returning getCoorXY.
-     * @param y Value to added to coorY before returning getCoorXY.
-     */
-    public static void setCoorXY_OS(double x, double y){coorX_OS = x;   coorY_OS = y;}
-    /**
-     * @param xy Values to added to coorX, [0] & Y [1] before returning getCoorXY.
-     */
-    public static void setCoorXY_OS(double[] xy){coorX_OS = xy[0];   coorY_OS = xy[1];}
-    /**
-     * @param x Value to added to coorX before returning getCoorXY.
-     */
-    public static void setCoorX_OS(double x){coorX_OS = x;}
-    /**
-     * @param x Value to added to coorX before returning getCoorXY.
-     */
-    public static void setCoorY_OS(double y){coorY_OS = y;}
-
-    /**
-     * @return an array of the calculated X and Y coordinate on the field since the last reset.
-     */
-    public static double[] getCoor(){
-        double[] coorXY = {coorX + coorX_OS, coorY + coorY_OS};
-        return coorXY;
-    }
-
-    /**
-     * @return the calculated X (left/right) coordinate on the field since the last reset.
-     */
-    public static double getCoorX(){
-        return coorX + coorX_OS;
-    }
-
-    /**
-     * @return the calculated Y (fwd/bkwd) coordinate on the field since the last reset.
-     */
-    public static double getCoorY(){
-        return coorY + coorY_OS;
-    }
-
-    /**
-     * @return the calculated Y (fwd/bkwd) coordinate on the field since the last reset.
-     */
-    public static double getDeltaD(){
-        return deltaD;
-    }
 }
