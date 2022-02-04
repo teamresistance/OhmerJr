@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.hdw_io.util.CoorSys;
 import frc.io.hdw_io.util.NavX;
+import edu.wpi.first.wpilibj.SPI;
 import frc.io.hdw_io.util.Whl_Encoder;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -24,7 +25,7 @@ public class IO {
     public static DifferentialDrive diffDrv_M = new DifferentialDrive(IO.drvTSRX_L, IO.drvTSRX_R);
 
     // navX
-    public static NavX navX = new NavX();
+    public static NavX navX = new NavX(SPI.Port.kMXP);
     public static CoorSys coorXY = new CoorSys(navX, drvEnc_L, drvEnc_R);
 
     // PDP
@@ -56,6 +57,8 @@ public class IO {
     public static void sdbInit() {
         SmartDashboard.putBoolean("Coor/Reset", false);
         SmartDashboard.putNumber("NavX/Angle Adj", 0);
+        SmartDashboard.putBoolean("NavX/Zero Yaw", false);   //Set to yaw value?
+        SmartDashboard.putBoolean("NavX/Reset", false);   //Set to yaw value?
     }
 
     public static void sdbUpdate() {
@@ -68,11 +71,22 @@ public class IO {
             SmartDashboard.putBoolean("Coor/Reset", false);
         }
         SmartDashboard.putNumber("NavX/Heading Angle", navX.getAngle());  //Z continueous
+        SmartDashboard.putNumber("NavX/Hdg Angle 360", navX.getNormalizedAngle());  //Z continueous
+        SmartDashboard.putNumber("NavX/Hdg Angle 180", navX.getNormalizedTo180());  //Z continueous
         SmartDashboard.putNumber("NavX/Heading Yaw", navX.getYaw());    //Z -180 to 180
         SmartDashboard.putNumber("NavX/Heading Raw Z", navX.getRawGyroZ());//Z raw vel deg/sec
         SmartDashboard.putNumber("NavX/Pitch", navX.getPitch());  //X? -180 to 180
         SmartDashboard.putNumber("NavX/Roll", navX.getRoll());   //X? -180 to 180
         navX.setAngleAdjustment(SmartDashboard.getNumber("NavX/Angle Adj", 0));
+
+        if (SmartDashboard.getBoolean("NavX/Reset", false)) {
+            navX.reset();     //Reset yaw, angle??
+            SmartDashboard.putBoolean("NavX/Reset", false);
+        }
+        if (SmartDashboard.getBoolean("NavX/Zero Yaw", false)) {
+            navX.zeroYaw();     //Set to yaw value?
+            SmartDashboard.putBoolean("NavX/Zero Yaw", false);
+        }
     }
 
 }
