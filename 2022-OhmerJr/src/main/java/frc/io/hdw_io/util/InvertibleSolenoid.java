@@ -20,6 +20,7 @@ public class InvertibleSolenoid extends Solenoid implements ISolenoid {
     //This activates the Solenoid
     @Override
     public void set(boolean state) {
+        // super.set(isInverted ^ state);   //Why not this?
         if (isInverted) {
             super.set(!state);
         } else {
@@ -28,6 +29,7 @@ public class InvertibleSolenoid extends Solenoid implements ISolenoid {
     }
 
     public boolean get(){
+        // return (isInverted ^ super.get());       //Why not this?
         return (isInverted ? !super.get() : super.get());
     }
 
