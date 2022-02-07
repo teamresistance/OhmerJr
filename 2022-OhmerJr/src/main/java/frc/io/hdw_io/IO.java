@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.hdw_io.util.CoorSys;
 import frc.io.hdw_io.util.NavX;
+import frc.io.hdw_io.util.Whl_Enc_Neo;
+import frc.io.hdw_io.util.Whl_Enc_Pwf;
 import edu.wpi.first.wpilibj.SPI;
 import frc.io.hdw_io.util.Whl_Encoder;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -11,8 +13,16 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.*;
+import com.playingwithfusion.CANVenom;
+import com.playingwithfusion.CANVenom.BrakeCoastMode;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class IO {
+    // PDP
+    public static PowerDistribution pdp = new PowerDistribution(0,ModuleType.kCTRE);
+
     // Drive
     public static WPI_TalonSRX drvTSRX_L = new WPI_TalonSRX(56); // Cmds left wheels. Includes encoders
     public static WPI_TalonSRX drvTSRX_R = new WPI_TalonSRX(57); // Cmds right wheels. Includes encoders
@@ -28,8 +38,33 @@ public class IO {
     public static NavX navX = new NavX(SPI.Port.kMXP);
     public static CoorSys coorXY = new CoorSys(navX, drvEnc_L, drvEnc_R);
 
-    // PDP
-    public static PowerDistribution pdp = new PowerDistribution(0,ModuleType.kCTRE);
+    //Test NEO brushless motor with a Spark Max controller
+    public static CANSparkMax drvMtrNeo_L = new CANSparkMax(2, MotorType.kBrushless); // Test drv mtr left whl
+    public static CANSparkMax drvMtrNeo_R = new CANSparkMax(3, MotorType.kBrushless); // Test drv mtr right whl
+    public static DifferentialDrive diffDrv_Neo = new DifferentialDrive(drvMtrNeo_L, drvMtrNeo_R);
+
+    public static Whl_Enc_Neo WhlEncNeo_L = new Whl_Enc_Neo(drvMtrNeo_L, 866.4);
+    public static Whl_Enc_Neo WhlEncNeo_R = new Whl_Enc_Neo(drvMtrNeo_R, 866.4);
+
+    public static CANSparkMax armMtrNeo_Lead = new CANSparkMax(4, MotorType.kBrushless); // Lead motor for arm rotation
+    public static CANSparkMax armMtrNeo_Foll = new CANSparkMax(5, MotorType.kBrushless); // Follower motor for arm rotation
+
+    public static Whl_Enc_Neo armEncNeo_L = new Whl_Enc_Neo(armMtrNeo_Lead, 866.4);
+    public static Whl_Enc_Neo armEncNeo_F = new Whl_Enc_Neo(armMtrNeo_Foll, 866.4);
+
+    //Test Venom brushless motor built-in controller from Playing With Fusion, PWF
+    public static CANVenom drvMtrPwf_L = new CANVenom(11); // Test drv mtr left whl
+    public static CANVenom drvMtrPwf_R = new CANVenom(12); // Test drv mtr right whl
+    public static DifferentialDrive diffDrv_Pwf = new DifferentialDrive(drvMtrPwf_L, drvMtrPwf_R);
+
+    public static Whl_Enc_Pwf WhlEncPwf_L = new Whl_Enc_Pwf(drvMtrPwf_L, 866.4);
+    public static Whl_Enc_Pwf WhlEncPwf_R = new Whl_Enc_Pwf(drvMtrPwf_R, 866.4);
+
+    public static CANVenom armMtrPwf_Lead = new CANVenom(4); // Lead motor for arm rotation
+    public static CANVenom armMtrPwf_Foll = new CANVenom(5); // Follower motor for arm rotation
+
+    public static Whl_Enc_Pwf armEncPwf_L = new Whl_Enc_Pwf(armMtrPwf_Lead, 866.4);
+    public static Whl_Enc_Pwf armEncPwf_F = new Whl_Enc_Pwf(armMtrPwf_Foll, 866.4);
 
     // Initialize any hardware here
     public static void init() {
@@ -52,6 +87,38 @@ public class IO {
         drvTSRX_R.setSensorPhase(false); // Adjust this to correct phasing with motor
         drvTSRX_L.setNeutralMode(NeutralMode.Brake); // change it back
         drvTSRX_R.setNeutralMode(NeutralMode.Brake); // change it back
+
+        // Test arm motor
+        drvMtrNeo_L.restoreFactoryDefaults();
+        drvMtrNeo_R.restoreFactoryDefaults();
+        drvMtrNeo_L.setIdleMode(IdleMode.kBrake);
+        drvMtrNeo_R.setIdleMode(IdleMode.kBrake);
+        drvMtrNeo_L.setInverted(false);
+        drvMtrNeo_R.setInverted(true);
+
+        armMtrNeo_Lead.restoreFactoryDefaults();
+        armMtrNeo_Foll.restoreFactoryDefaults();
+        armMtrNeo_Lead.setIdleMode(IdleMode.kBrake);
+        armMtrNeo_Foll.setIdleMode(IdleMode.kBrake);
+        armMtrNeo_Lead.setInverted(false);
+        armMtrNeo_Foll.setInverted(true);
+        armMtrNeo_Foll.follow(armMtrNeo_Lead);        
+
+        // drvMtrPwf_L.restoreFactoryDefaults();
+        // drvMtrPwf_R.restoreFactoryDefaults();
+        drvMtrPwf_L.setBrakeCoastMode(BrakeCoastMode.Brake);
+        drvMtrPwf_R.setBrakeCoastMode(BrakeCoastMode.Brake);
+        drvMtrPwf_L.setInverted(false);
+        drvMtrPwf_R.setInverted(true);
+
+        // armMtrPwf_Lead.restoreFactoryDefaults();
+        // armMtrPwf_Foll.restoreFactoryDefaults();
+        armMtrPwf_Lead.setBrakeCoastMode(BrakeCoastMode.Brake);
+        armMtrPwf_Foll.setBrakeCoastMode(BrakeCoastMode.Brake);
+        armMtrPwf_Lead.setInverted(false);
+        armMtrPwf_Foll.setInverted(true);
+        armMtrPwf_Foll.follow(armMtrPwf_Lead);        
+
     }
 
     public static void sdbInit() {
