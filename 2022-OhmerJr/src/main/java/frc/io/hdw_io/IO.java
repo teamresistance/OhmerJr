@@ -4,10 +4,10 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.hdw_io.util.CoorSys;
 import frc.io.hdw_io.util.NavX;
-import frc.io.hdw_io.util.Whl_Enc_Neo;
-import frc.io.hdw_io.util.Whl_Enc_Pwf;
+import frc.io.hdw_io.util.Encoder_Neo;
+import frc.io.hdw_io.util.Encoder_Pwf;
 import edu.wpi.first.wpilibj.SPI;
-import frc.io.hdw_io.util.Whl_Encoder;
+import frc.io.hdw_io.util.Encoder_Tln;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
@@ -28,8 +28,8 @@ public class IO {
     public static WPI_TalonSRX drvTSRX_R = new WPI_TalonSRX(57); // Cmds right wheels. Includes encoders
     public static final double drvTPF_L = 433.20; // 1024 t/r (0.5' * 3.14)/r 9:60 gr
     public static final double drvTPF_R = 433.20; // 1024 t/r (0.5' * 3.14)/r 9:60 gr
-    public static Whl_Encoder drvEnc_L = new Whl_Encoder(drvTSRX_L, drvTPF_L);  //Interface for feet, ticks, reset
-    public static Whl_Encoder drvEnc_R = new Whl_Encoder(drvTSRX_R, drvTPF_R);
+    public static Encoder_Tln drvEnc_L = new Encoder_Tln(drvTSRX_L, drvTPF_L);  //Interface for feet, ticks, reset
+    public static Encoder_Tln drvEnc_R = new Encoder_Tln(drvTSRX_R, drvTPF_R);
 
     // Assignments used by DiffDrv. Slaves sent same command.  Slaves set to follow Masters in IO.
     public static DifferentialDrive diffDrv_M = new DifferentialDrive(IO.drvTSRX_L, IO.drvTSRX_R);
@@ -43,28 +43,28 @@ public class IO {
     public static CANSparkMax drvMtrNeo_R = new CANSparkMax(3, MotorType.kBrushless); // Test drv mtr right whl
     public static DifferentialDrive diffDrv_Neo = new DifferentialDrive(drvMtrNeo_L, drvMtrNeo_R);
 
-    public static Whl_Enc_Neo WhlEncNeo_L = new Whl_Enc_Neo(drvMtrNeo_L, 866.4);
-    public static Whl_Enc_Neo WhlEncNeo_R = new Whl_Enc_Neo(drvMtrNeo_R, 866.4);
+    public static Encoder_Neo WhlEncNeo_L = new Encoder_Neo(drvMtrNeo_L, 866.4);
+    public static Encoder_Neo WhlEncNeo_R = new Encoder_Neo(drvMtrNeo_R, 866.4);
 
     public static CANSparkMax armMtrNeo_Lead = new CANSparkMax(4, MotorType.kBrushless); // Lead motor for arm rotation
     public static CANSparkMax armMtrNeo_Foll = new CANSparkMax(5, MotorType.kBrushless); // Follower motor for arm rotation
 
-    public static Whl_Enc_Neo armEncNeo_L = new Whl_Enc_Neo(armMtrNeo_Lead, 866.4);
-    public static Whl_Enc_Neo armEncNeo_F = new Whl_Enc_Neo(armMtrNeo_Foll, 866.4);
+    public static Encoder_Neo armEncNeo_L = new Encoder_Neo(armMtrNeo_Lead, 866.4);
+    public static Encoder_Neo armEncNeo_F = new Encoder_Neo(armMtrNeo_Foll, 866.4);
 
     //Test Venom brushless motor built-in controller from Playing With Fusion, PWF
     public static CANVenom drvMtrPwf_L = new CANVenom(11); // Test drv mtr left whl
     public static CANVenom drvMtrPwf_R = new CANVenom(12); // Test drv mtr right whl
     public static DifferentialDrive diffDrv_Pwf = new DifferentialDrive(drvMtrPwf_L, drvMtrPwf_R);
 
-    public static Whl_Enc_Pwf WhlEncPwf_L = new Whl_Enc_Pwf(drvMtrPwf_L, 866.4);
-    public static Whl_Enc_Pwf WhlEncPwf_R = new Whl_Enc_Pwf(drvMtrPwf_R, 866.4);
+    public static Encoder_Pwf WhlEncPwf_L = new Encoder_Pwf(drvMtrPwf_L, 866.4);
+    public static Encoder_Pwf WhlEncPwf_R = new Encoder_Pwf(drvMtrPwf_R, 866.4);
 
     public static CANVenom armMtrPwf_Lead = new CANVenom(4); // Lead motor for arm rotation
     public static CANVenom armMtrPwf_Foll = new CANVenom(5); // Follower motor for arm rotation
 
-    public static Whl_Enc_Pwf armEncPwf_L = new Whl_Enc_Pwf(armMtrPwf_Lead, 866.4);
-    public static Whl_Enc_Pwf armEncPwf_F = new Whl_Enc_Pwf(armMtrPwf_Foll, 866.4);
+    public static Encoder_Pwf armEncPwf_L = new Encoder_Pwf(armMtrPwf_Lead, 866.4);
+    public static Encoder_Pwf armEncPwf_F = new Encoder_Pwf(armMtrPwf_Foll, 866.4);
 
     // Initialize any hardware here
     public static void init() {

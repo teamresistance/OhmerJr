@@ -6,20 +6,25 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.hdw_io.IO;
-import frc.io.hdw_io.util.Whl_Enc_Neo;
-import frc.io.hdw_io.util.Whl_Enc_Pwf;
-import frc.io.hdw_io.util.Whl_Encoder;
+import frc.io.hdw_io.util.Encoder_Neo;
+import frc.io.hdw_io.util.Encoder_Pwf;
+import frc.io.hdw_io.util.Encoder_Tln;
 import frc.io.joysticks.JS_IO;
 import frc.io.joysticks.util.Axis;
 import frc.io.joysticks.util.Button;
 import frc.util.Timer;
 
+/**Class for testing the new NEO motor w/ Spark Max controller
+ * and the Venom motor w/ built in controller using raw motor control.
+ * <p>Only 1 style can be tested at a time.
+ * <p>Example of using 2 in tandem for arm control
+ */
 public class TestArmMotors {
     // Hardware defintions:
     private static CANSparkMax armMtr = IO.armMtrNeo_Lead;
     private static CANSparkMax armMtrFoll = IO.armMtrNeo_Foll;
-    private static Whl_Enc_Neo armEnc_L = IO.armEncNeo_L;
-    private static Whl_Enc_Neo armEnc_F = IO.armEncNeo_F;
+    private static Encoder_Neo armEnc_L = IO.armEncNeo_L;
+    private static Encoder_Neo armEnc_F = IO.armEncNeo_F;
 
     // private static CANVenom armMtr = IO.armMtrPwf_Lead;
     // private static CANVenom armMtrFoll = IO.armMtrPwf_Foll;
@@ -42,7 +47,7 @@ public class TestArmMotors {
      */
     public static void init() {
         sdbInit();
-        cmdUpdate(0.0, false, false); // select goal, left trigger, right trigger
+        cmdUpdate(0.0); // select goal, left trigger, right trigger
         state = 1; // Start at state 0
     }
 
@@ -65,10 +70,10 @@ public class TestArmMotors {
                 armMtr.set(0.0);
                 break;
             case 1: // Tank
-                armMtr.set(axLeftY.get());
+                cmdUpdate(axLeftY.get());
                 break;
             default: // all off
-                cmdUpdate(0.0, false, false);
+                cmdUpdate(0.0);
                 break;
 
         }
@@ -82,9 +87,8 @@ public class TestArmMotors {
      * @param right_trigger - triggers the right catapult
      * 
      */
-    public static void cmdUpdate(double dblSig, boolean trigger1, boolean trigger2) {
-        //Check any safeties, mod passed cmds if needed.
-        //Send commands to hardware
+    public static void cmdUpdate(double dblSig) {
+        armMtr.set(dblSig);
     }
 
     /*-------------------------  SDB Stuff --------------------------------------
@@ -120,7 +124,7 @@ public class TestArmMotors {
      * @return If the state machine is running, not idle.
      */
     public static boolean getStatus(){
-        return state != 0;      //This example says the sm is runing, not idle.
+        return state != 0;      //This example says the sm is running, not idle.
     }
 
 }

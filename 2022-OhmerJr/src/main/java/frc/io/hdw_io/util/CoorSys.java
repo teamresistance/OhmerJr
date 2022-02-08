@@ -3,8 +3,8 @@ package frc.io.hdw_io.util;
 public class CoorSys {
     // Hardware
     private NavX navX;
-    private Whl_Encoder whlEnc_L;
-    private Whl_Encoder whlEnc_R;
+    private Encoder_Tln whlEnc_L;
+    private Encoder_Tln whlEnc_R;
 
     // XY Coordinates
     private double prstDist;     //Present distance traveled since last reset.
@@ -21,7 +21,7 @@ public class CoorSys {
      * @param left wheel encaoder
      * @param right wheel encoder
      */
-    public CoorSys(NavX hdg, Whl_Encoder left, Whl_Encoder right){
+    public CoorSys(NavX hdg, Encoder_Tln left, Encoder_Tln right){
         navX = hdg;
         whlEnc_L = left;
         whlEnc_R = right;

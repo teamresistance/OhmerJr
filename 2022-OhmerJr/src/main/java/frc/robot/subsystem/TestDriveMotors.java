@@ -6,21 +6,26 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.hdw_io.IO;
-import frc.io.hdw_io.util.Whl_Enc_Neo;
-import frc.io.hdw_io.util.Whl_Enc_Pwf;
-import frc.io.hdw_io.util.Whl_Encoder;
+import frc.io.hdw_io.util.Encoder_Neo;
+import frc.io.hdw_io.util.Encoder_Pwf;
+import frc.io.hdw_io.util.Encoder_Tln;
 import frc.io.joysticks.JS_IO;
 import frc.io.joysticks.util.Axis;
 import frc.io.joysticks.util.Button;
 import frc.util.Timer;
 
+/**Class for testing the new NEO motor w/ Spark Max controller
+ * and the Venom motor w/ built in controller using DifferentialDrive.
+ * <p>Only 1 style can be tested at a time.
+ * <p>Example of using 2 in tandem for arm control
+ */
 public class TestDriveMotors {
     // Hardware defintions:
     private static DifferentialDrive diffDrv = IO.diffDrv_Neo;
-    private static CANSparkMax drvMtr_L = IO.drvMtrNeo_L;
-    private static CANSparkMax drvMtr_R = IO.drvMtrNeo_R;
-    private static Whl_Enc_Neo whlEnc_L = IO.WhlEncNeo_L;
-    private static Whl_Enc_Neo whlEnc_R = IO.WhlEncNeo_R;
+    private static CANSparkMax drvMtr_L = IO.drvMtrNeo_L;   //Only needed these 
+    private static CANSparkMax drvMtr_R = IO.drvMtrNeo_R;   //for
+    private static Encoder_Neo whlEnc_L = IO.WhlEncNeo_L;   //Smartdashboard
+    private static Encoder_Neo whlEnc_R = IO.WhlEncNeo_R;   //
 
     // private static DifferentialDrive diffDrv = IO.diffDrv_Pwf;
     // private static CANVenom    drvMtr_L = IO.drvMtrPwf_L;
@@ -29,10 +34,10 @@ public class TestDriveMotors {
     // private static Whl_Enc_Pwf whlEnc_R = IO.WhlEncPwf_R;
 
     // Joystick axis, buttons & povs:
-    private static Axis axLeftX = JS_IO.axLeftX;
-    private static Axis axLeftY = JS_IO.axLeftY;
-    private static Axis axRightX = JS_IO.axRightX;
-    private static Axis axRightY = JS_IO.axRightY;
+    private static Axis axLeftX = JS_IO.axLeftX;    //Used w/ Arcade
+    private static Axis axLeftY = JS_IO.axLeftY;    //Used w/ Arcade or Tank
+    private static Axis axRightX = JS_IO.axRightX;  //not used
+    private static Axis axRightY = JS_IO.axRightY;  //Tank only
 
     // variables:
     private static int state; // Shooter state machine. 0=Off by pct, 1=On by velocity, RPM
@@ -45,7 +50,7 @@ public class TestDriveMotors {
     public static void init() {
         sdbInit();
         cmdUpdate(0.0, false, false); // select goal, left trigger, right trigger
-        state = 1; // Start at state 0
+        state = 1; // Start at state 1, Tank default
     }
 
     /**

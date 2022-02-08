@@ -1,29 +1,30 @@
 package frc.io.hdw_io.util;
 
+import com.playingwithfusion.CANVenom;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.util.Units;
 
-public class Whl_Enc_Neo {
+public class Encoder_Pwf {
 
     private double tpf;
-    private RelativeEncoder neoEnc;
+    private CANVenom venomCtlr;
 
     /**Interface to Spark Max controller with NEO motor encoders */
-    public Whl_Enc_Neo(CANSparkMax escPort, double _tpf){
+    public Encoder_Pwf(CANVenom escPort, double _tpf){
         tpf = _tpf;
-        neoEnc = escPort.getEncoder();
+        venomCtlr = escPort;
     }
 
     /**@return Encoder ticks. */
     public double ticks(){
-        return neoEnc.getPosition();
+        return venomCtlr.getPosition();
     }
 
     /**@return calculated feet from ticks. */
     public double feet(){
-        return tpf == 0.0 ? 0.0 : neoEnc.getPosition() / tpf;
+        return tpf == 0.0 ? 0.0 : venomCtlr.getPosition() / tpf;
     }
 
     /**@return calcuate meters from feet. */
@@ -32,7 +33,10 @@ public class Whl_Enc_Neo {
     }
 
     /** Reset encoder count to zero. */
-    public void reset(){ neoEnc.setPosition(0.0); }
+    public void reset(){
+        venomCtlr.resetPosition();
+        // venomCtlr.setPosition(0.0);
+    }
 
     /**@return the existiing ticks per foot, tpf. */
     public double getTPF() { return tpf; }

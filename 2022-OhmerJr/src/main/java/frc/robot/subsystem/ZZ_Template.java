@@ -2,7 +2,7 @@ package frc.robot.subsystem;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.hdw_io.IO;
-import frc.io.hdw_io.util.Whl_Encoder;
+import frc.io.hdw_io.util.Encoder_Tln;
 import frc.io.joysticks.JS_IO;
 import frc.io.joysticks.util.Button;
 import frc.util.Timer;
@@ -103,7 +103,7 @@ public class ZZ_Template {
      * @return If the state machine is running, not idle.
      */
     public static boolean getStatus(){
-        return state != 0;      //This example says the sm is runing, not idle.
+        return state != 0;      //This example says the sm is running, not idle.
     }
 
 }

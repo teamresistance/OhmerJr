@@ -1,30 +1,28 @@
 package frc.io.hdw_io.util;
 
-import com.playingwithfusion.CANVenom;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.math.util.Units;
 
-public class Whl_Enc_Pwf {
+public class Encoder_Tln {
 
+    private WPI_TalonSRX talonCtlr;
     private double tpf;
-    private CANVenom venomCtlr;
 
-    /**Interface to Spark Max controller with NEO motor encoders */
-    public Whl_Enc_Pwf(CANVenom escPort, double _tpf){
+    /**Interface to Talon encoders */
+    public Encoder_Tln(WPI_TalonSRX escPort, double _tpf){
+        talonCtlr = escPort;
         tpf = _tpf;
-        venomCtlr = escPort;
     }
 
     /**@return Encoder ticks. */
     public double ticks(){
-        return venomCtlr.getPosition();
+        return talonCtlr.getSelectedSensorPosition();
     }
 
     /**@return calculated feet from ticks. */
     public double feet(){
-        return tpf == 0.0 ? 0.0 : venomCtlr.getPosition() / tpf;
+        return tpf == 0.0 ? 0.0 : talonCtlr.getSelectedSensorPosition() / tpf;
     }
 
     /**@return calcuate meters from feet. */
@@ -34,8 +32,7 @@ public class Whl_Enc_Pwf {
 
     /** Reset encoder count to zero. */
     public void reset(){
-        venomCtlr.resetPosition();
-        // venomCtlr.setPosition(0.0);
+        talonCtlr.setSelectedSensorPosition(0, 0, 0);
     }
 
     /**@return the existiing ticks per foot, tpf. */
