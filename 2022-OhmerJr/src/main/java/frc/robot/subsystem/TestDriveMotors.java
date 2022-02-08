@@ -1,6 +1,7 @@
 package frc.robot.subsystem;
 
 import com.playingwithfusion.CANVenom;
+import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,14 +16,15 @@ import frc.util.Timer;
 
 public class TestDriveMotors {
     // Hardware defintions:
-    private static DifferentialDrive diffDrv = IO.diffDrv_M;
-    // private static DifferentialDrive diffDrv = IO.diffDrv_Neo;
-    // private static DifferentialDrive diffDrv = IO.diffDrv_Pwf;
+    private static DifferentialDrive diffDrv = IO.diffDrv_Neo;
+    private static CANSparkMax drvMtr_L = IO.drvMtrNeo_L;
+    private static CANSparkMax drvMtr_R = IO.drvMtrNeo_R;
+    private static Whl_Enc_Neo whlEnc_L = IO.WhlEncNeo_L;
+    private static Whl_Enc_Neo whlEnc_R = IO.WhlEncNeo_R;
 
-    private static Whl_Encoder whlEnc_L = IO.drvEnc_L;
-    private static Whl_Encoder whlEnc_R = IO.drvEnc_R;
-    // private static Whl_Enc_Neo whlEnc_L = IO.WhlEncNeo_L;
-    // private static Whl_Enc_Neo whlEnc_R = IO.WhlEncNeo_R;
+    // private static DifferentialDrive diffDrv = IO.diffDrv_Pwf;
+    // private static CANVenom    drvMtr_L = IO.drvMtrPwf_L;
+    // private static CANVenom    drvMtr_R = IO.drvMtrPwf_R;
     // private static Whl_Enc_Pwf whlEnc_L = IO.WhlEncPwf_L;
     // private static Whl_Enc_Pwf whlEnc_R = IO.WhlEncPwf_R;
 
@@ -43,7 +45,7 @@ public class TestDriveMotors {
     public static void init() {
         sdbInit();
         cmdUpdate(0.0, false, false); // select goal, left trigger, right trigger
-        state = 0; // Start at state 0
+        state = 1; // Start at state 0
     }
 
     /**
@@ -93,13 +95,21 @@ public class TestDriveMotors {
     /*-------------------------  SDB Stuff --------------------------------------
     /**Initialize sdb */
     public static void sdbInit() {
-        //Put stuff here on the sdb to be retrieved from the sdb later
-        // SmartDashboard.putBoolean("ZZ_Template/Sumpthin", sumpthin.get());
+        SmartDashboard.putNumber("Test Drv/8. TPF Left",  IO.WhlEncNeo_L.getTPF());
+        SmartDashboard.putNumber("Test Drv/9. TPF Right", IO.WhlEncNeo_R.getTPF());
     }
 
     /**Update the Smartdashboard. */
     public static void sdbUpdate() {
-        SmartDashboard.putNumber("Test Drv/state", state);
+        SmartDashboard.putNumber("Test Drv/1. state", state);
+        SmartDashboard.putNumber("Test Drv/2. Cmd Left",    drvMtr_L.get());
+        SmartDashboard.putNumber("Test Drv/3. Cmd Right",   drvMtr_R.get());
+        SmartDashboard.putNumber("Test Drv/4. Ticks Left",  whlEnc_L.ticks());
+        SmartDashboard.putNumber("Test Drv/5. Ticks Right", whlEnc_R.ticks());
+        SmartDashboard.putNumber("Test Drv/6. Feet Left",   whlEnc_L.feet());
+        SmartDashboard.putNumber("Test Drv/7. Feet Right",  whlEnc_R.feet());
+        whlEnc_L.setTPF(SmartDashboard.getNumber("Test Drv/8. TPF Left", 1));
+        whlEnc_R.setTPF(SmartDashboard.getNumber("Test Drv/9. TPF Right", 1));
     }
 
     // ----------------- Shooter statuses and misc.-----------------

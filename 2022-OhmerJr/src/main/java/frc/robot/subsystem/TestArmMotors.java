@@ -43,7 +43,7 @@ public class TestArmMotors {
     public static void init() {
         sdbInit();
         cmdUpdate(0.0, false, false); // select goal, left trigger, right trigger
-        state = 0; // Start at state 0
+        state = 1; // Start at state 0
     }
 
     /**
