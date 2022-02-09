@@ -53,15 +53,15 @@ public class IO {
     public static Encoder_Neo armEncNeo_F = new Encoder_Neo(armMtrNeo_Foll, 866.4);
 
     //Test Venom brushless motor built-in controller from Playing With Fusion, PWF
-    public static CANVenom drvMtrPwf_L = new CANVenom(11); // Test drv mtr left whl
-    public static CANVenom drvMtrPwf_R = new CANVenom(12); // Test drv mtr right whl
+    public static CANVenom drvMtrPwf_L = new CANVenom(12); // Test drv mtr left whl
+    public static CANVenom drvMtrPwf_R = new CANVenom(13); // Test drv mtr right whl
     public static DifferentialDrive diffDrv_Pwf = new DifferentialDrive(drvMtrPwf_L, drvMtrPwf_R);
 
     public static Encoder_Pwf WhlEncPwf_L = new Encoder_Pwf(drvMtrPwf_L, 866.4);
     public static Encoder_Pwf WhlEncPwf_R = new Encoder_Pwf(drvMtrPwf_R, 866.4);
 
-    public static CANVenom armMtrPwf_Lead = new CANVenom(4); // Lead motor for arm rotation
-    public static CANVenom armMtrPwf_Foll = new CANVenom(5); // Follower motor for arm rotation
+    public static CANVenom armMtrPwf_Lead = new CANVenom(14); // Lead motor for arm rotation
+    public static CANVenom armMtrPwf_Foll = new CANVenom(15); // Follower motor for arm rotation
 
     public static Encoder_Pwf armEncPwf_L = new Encoder_Pwf(armMtrPwf_Lead, 866.4);
     public static Encoder_Pwf armEncPwf_F = new Encoder_Pwf(armMtrPwf_Foll, 866.4);
