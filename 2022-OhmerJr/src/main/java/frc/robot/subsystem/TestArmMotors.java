@@ -57,13 +57,13 @@ public class TestArmMotors {
      * Determine any state that needs to interupt the present state, usually by way
      * of a JS button but can be caused by other events.
      */
-    private static void update() {
+    public static void update() {
         //Add code here to start state machine or override the sm sequence
         smUpdate();
         sdbUpdate();
     }
 
-    public static void smUpdate() { // State Machine Update
+    private static void smUpdate() { // State Machine Update
 
         switch (state) {
             case 0: // Everything is off
@@ -94,20 +94,21 @@ public class TestArmMotors {
     /*-------------------------  SDB Stuff --------------------------------------
     /**Initialize sdb */
     public static void sdbInit() {
-        SmartDashboard.putNumber("Test Arm/9. tpf", armEnc_L.getTPF());
+        SmartDashboard.putNumber("Test Arm/10. tpf", armEnc_L.getTPF());
     }
 
     /**Update the Smartdashboard. */
     public static void sdbUpdate() {
         SmartDashboard.putNumber("Test Arm/1. state", state);
         SmartDashboard.putNumber("Test Arm/2. JSLY", axLeftY.get());
-        SmartDashboard.putNumber("Test Arm/3. Mtr Lead", armMtr.get());
-        SmartDashboard.putNumber("Test Arm/4. Mtr Foll", armMtrFoll.get());
-        SmartDashboard.putNumber("Test Arm/5. Lead Enc", armEnc_L.ticks());
-        SmartDashboard.putNumber("Test Arm/6. Foll Enc", armEnc_F.ticks());
-        SmartDashboard.putNumber("Test Arm/7. Lead Ft", armEnc_L.feet());
-        SmartDashboard.putNumber("Test Arm/8. Foll Ft", armEnc_F.feet());
-        armEnc_L.setTPF(SmartDashboard.getNumber("Test Arm/9. tpf", 1.0));
+        SmartDashboard.putNumber("Test Arm/3. Mtr Lead Current", armMtr.getOutputCurrent());
+        SmartDashboard.putNumber("Test Arm/4. Mtr Foll Current", armMtrFoll.getOutputCurrent());
+        SmartDashboard.putNumber("Test Arm/5. Mtr Foll Temp", armMtrFoll.getMotorTemperature());
+        SmartDashboard.putNumber("Test Arm/6. Lead Enc", armEnc_L.ticks());
+        SmartDashboard.putNumber("Test Arm/7. Foll Enc", armEnc_F.ticks());
+        SmartDashboard.putNumber("Test Arm/8. Lead Ft", armEnc_L.feet());
+        SmartDashboard.putNumber("Test Arm/9. Foll Ft", armEnc_F.feet());
+        armEnc_L.setTPF(SmartDashboard.getNumber("Test Arm/10. tpf", 1.0));
     }
 
     // ----------------- Shooter statuses and misc.-----------------

@@ -39,15 +39,15 @@ public class IO {
     public static CoorSys coorXY = new CoorSys(navX, drvEnc_L, drvEnc_R);
 
     //Test NEO brushless motor with a Spark Max controller
-    public static CANSparkMax drvMtrNeo_L = new CANSparkMax(2, MotorType.kBrushless); // Test drv mtr left whl
-    public static CANSparkMax drvMtrNeo_R = new CANSparkMax(3, MotorType.kBrushless); // Test drv mtr right whl
-    public static DifferentialDrive diffDrv_Neo = new DifferentialDrive(drvMtrNeo_L, drvMtrNeo_R);
+    //public static CANSparkMax drvMtrNeo_L = new CANSparkMax(2, MotorType.kBrushless); // Test drv mtr left whl
+    //public static CANSparkMax drvMtrNeo_R = new CANSparkMax(3, MotorType.kBrushless); // Test drv mtr right whl
+    //public static DifferentialDrive diffDrv_Neo = new DifferentialDrive(drvMtrNeo_L, drvMtrNeo_R);
 
-    public static Encoder_Neo WhlEncNeo_L = new Encoder_Neo(drvMtrNeo_L, 866.4);
-    public static Encoder_Neo WhlEncNeo_R = new Encoder_Neo(drvMtrNeo_R, 866.4);
+    //public static Encoder_Neo WhlEncNeo_L = new Encoder_Neo(drvMtrNeo_L, 866.4);
+    //public static Encoder_Neo WhlEncNeo_R = new Encoder_Neo(drvMtrNeo_R, 866.4);
 
-    public static CANSparkMax armMtrNeo_Lead = new CANSparkMax(4, MotorType.kBrushless); // Lead motor for arm rotation
-    public static CANSparkMax armMtrNeo_Foll = new CANSparkMax(5, MotorType.kBrushless); // Follower motor for arm rotation
+    public static CANSparkMax armMtrNeo_Lead = new CANSparkMax(10, MotorType.kBrushless); // Lead motor for arm rotation
+    public static CANSparkMax armMtrNeo_Foll = new CANSparkMax(11, MotorType.kBrushless); // Follower motor for arm rotation
 
     public static Encoder_Neo armEncNeo_L = new Encoder_Neo(armMtrNeo_Lead, 866.4);
     public static Encoder_Neo armEncNeo_F = new Encoder_Neo(armMtrNeo_Foll, 866.4);
@@ -55,7 +55,7 @@ public class IO {
     //Test Venom brushless motor built-in controller from Playing With Fusion, PWF
     public static CANVenom drvMtrPwf_L = new CANVenom(12); // Test drv mtr left whl
     public static CANVenom drvMtrPwf_R = new CANVenom(13); // Test drv mtr right whl
-    public static DifferentialDrive diffDrv_Pwf = new DifferentialDrive(drvMtrPwf_L, drvMtrPwf_R);
+   // public static DifferentialDrive diffDrv_Pwf = new DifferentialDrive(drvMtrPwf_L, drvMtrPwf_R);
 
     public static Encoder_Pwf WhlEncPwf_L = new Encoder_Pwf(drvMtrPwf_L, 866.4);
     public static Encoder_Pwf WhlEncPwf_R = new Encoder_Pwf(drvMtrPwf_R, 866.4);
@@ -89,19 +89,19 @@ public class IO {
         drvTSRX_R.setNeutralMode(NeutralMode.Brake); // change it back
 
         // Test arm motor
-        drvMtrNeo_L.restoreFactoryDefaults();
-        drvMtrNeo_R.restoreFactoryDefaults();
-        drvMtrNeo_L.setIdleMode(IdleMode.kBrake);
-        drvMtrNeo_R.setIdleMode(IdleMode.kBrake);
-        drvMtrNeo_L.setInverted(false);
-        drvMtrNeo_R.setInverted(true);
+        // drvMtrNeo_L.restoreFactoryDefaults();
+        // drvMtrNeo_R.restoreFactoryDefaults();
+        // drvMtrNeo_L.setIdleMode(IdleMode.kBrake);
+        // drvMtrNeo_R.setIdleMode(IdleMode.kBrake);
+        // drvMtrNeo_L.setInverted(false);
+        // drvMtrNeo_R.setInverted(true);
 
         armMtrNeo_Lead.restoreFactoryDefaults();
         armMtrNeo_Foll.restoreFactoryDefaults();
         armMtrNeo_Lead.setIdleMode(IdleMode.kBrake);
         armMtrNeo_Foll.setIdleMode(IdleMode.kBrake);
         armMtrNeo_Lead.setInverted(false);
-        armMtrNeo_Foll.setInverted(true);
+        armMtrNeo_Foll.setInverted(false);
         armMtrNeo_Foll.follow(armMtrNeo_Lead);        
 
         // drvMtrPwf_L.restoreFactoryDefaults();
@@ -126,11 +126,15 @@ public class IO {
         SmartDashboard.putNumber("NavX/Angle Adj", 0);
         SmartDashboard.putBoolean("NavX/Zero Yaw", false);   //Set to yaw value?
         SmartDashboard.putBoolean("NavX/Reset", false);   //Set to yaw value?
+        SmartDashboard.putNumber("Coor/X_OS",0);
+        SmartDashboard.putNumber("Coor/Y_OS",0);
+        SmartDashboard.putBoolean("Coor/distanceReset", false);
     }
 
     public static void sdbUpdate() {
         SmartDashboard.putNumber("Coor/X", coorXY.getX());
         SmartDashboard.putNumber("Coor/Y", coorXY.getY());
+        coorXY.setXY_OS(SmartDashboard.getNumber("Coor/X_OS", 0), SmartDashboard.getNumber("Coor/Y_OS", 0));
         SmartDashboard.putNumber("Coor/EncoderL", drvTSRX_L.getSelectedSensorPosition());
         SmartDashboard.putNumber("Coor/EncoderR", drvTSRX_R.getSelectedSensorPosition());
         if (SmartDashboard.getBoolean("Coor/Reset", false)) {
@@ -145,7 +149,10 @@ public class IO {
         SmartDashboard.putNumber("NavX/Pitch", navX.getPitch());  //X? -180 to 180
         SmartDashboard.putNumber("NavX/Roll", navX.getRoll());   //X? -180 to 180
         navX.setAngleAdjustment(SmartDashboard.getNumber("NavX/Angle Adj", 0));
-
+        if (SmartDashboard.getBoolean("Coor/distanceReset", false)) {
+            coorXY.drvFeetRst();
+            SmartDashboard.putBoolean("Coor/distanceReset", false);
+        }
         if (SmartDashboard.getBoolean("NavX/Reset", false)) {
             navX.reset();     //Reset yaw, angle??
             SmartDashboard.putBoolean("NavX/Reset", false);

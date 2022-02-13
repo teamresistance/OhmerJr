@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.io.hdw_io.IO;
 import frc.io.joysticks.JS_IO;
+import frc.robot.subsystem.TestArmMotors;
 import frc.robot.subsystem.drive.Drv_Auto;
 import frc.robot.subsystem.drive.Drv_Teleop;
 import frc.robot.subsystem.drive.Trajectories;
@@ -66,14 +67,16 @@ public class Robot extends TimedRobot {
     /** This function is called once when teleop is enabled. */
     @Override
     public void teleopInit() {
-        Drv_Auto.disable();  //Disable Auto if still executing.
+        //Drv_Auto.disable();  //Disable Auto if still executing.
         Drv_Teleop.init();  
+        //TestArmMotors.init();
     }
 
     /** This function is called periodically during operator control. */
     @Override
     public void teleopPeriodic() {
         Drv_Teleop.update();
+        //TestArmMotors.update();
     }
 
     /** This function is called once when the robot is disabled. */

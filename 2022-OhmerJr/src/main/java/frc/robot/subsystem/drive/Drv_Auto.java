@@ -2,6 +2,7 @@ package frc.robot.subsystem.drive;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.hdw_io.IO;
+import frc.io.hdw_io.util.NavX;
 import frc.robot.subsystem.drive.trajFunk.*;
 
 public class Drv_Auto extends Drive {
@@ -27,6 +28,8 @@ public class Drv_Auto extends Drive {
         distRst();
         IO.coorXY.reset();
         Drive.init();
+
+        IO.navX.setAngleAdjustment(24.0);
 
         System.out.println("Auto - Init");
     }
@@ -90,6 +93,7 @@ public class Drv_Auto extends Drive {
     }
 
     public static void sdbInit() {
+        //SmartDashboard.putNumber("Drv/Auto/HdgAdjust", 24.0);
     }
 
     public static void sdbUpdate() {
@@ -97,5 +101,6 @@ public class Drv_Auto extends Drive {
         SmartDashboard.putNumber("Drv/Auto/Current Traj Idx", idx);
         SmartDashboard.putNumber("Drv/Auto/hdgFB", hdgFB());
         SmartDashboard.putNumber("Drv/Auto/distFB", distFB());
+        //IO.navX.setAngleAdjustment(SmartDashboard.getNumber("Drv/Auto/HdgAdjust", 24.0));
     }
 }

@@ -85,7 +85,7 @@ public class CoorSys {
 
     /** @return an array of the calculated X and Y coordinates on the field since the last reset. */
     public double[] get(){
-        double[] coorXY = {coorX + coorX_OS, coorY + coorY_OS};
+        double[] coorXY = {getX(), getY()};
         return coorXY;
     }
 
