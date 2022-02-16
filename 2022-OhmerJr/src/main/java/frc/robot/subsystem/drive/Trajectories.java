@@ -72,11 +72,12 @@ public class Trajectories {
 
     public static ATrajFunction[] getCargo1(double pwr) {
         ATrajFunction traj[] = {
-            new MoveOnHdg(0  , 15, pwr), // Moves 15 ft
-            new MoveOnHdg(0  ,-0.2,pwr), // Brakes
-            new TankTurnHdg(-90, 0.65, -0.65), //Turns
-            new MoveOnHdg(-90, 10, pwr), //Moves
-            new MoveOnHdg(-90  ,-0.2,pwr), // Brakes
+            new CoorOffset(24, -1.5, 3), 
+            new Waypt(-1.5, 10)            // new MoveOnHdg(0  , 15, pwr), // Moves 15 ft
+            // new MoveOnHdg(0  ,-0.2,pwr), // Brakes
+            // new TankTurnHdg(-90, 0.65, -0.65), //Turns
+            // new Move/;00p;/OnHdg(-90, 10, pwr), //Moves
+            // new MoveOnHdg(-90  ,-0.2,pwr), // Brakes
         };
         return traj;
     }

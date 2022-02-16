@@ -29,8 +29,6 @@ public class Drv_Auto extends Drive {
         IO.coorXY.reset();
         Drive.init();
 
-        IO.navX.setAngleAdjustment(24.0);
-
         System.out.println("Auto - Init");
     }
 
