@@ -5,6 +5,7 @@ History -
 1/1/20 - Anthony released
 3/12/20 - JCH added simple startTimer and renamed vars.
 3/15/21 - JCH added comments and chgd to timer v. delay.  Cascade to startTimer().
+2/17/22 - Po added clearTimer(); & chgd trgrs to objs, to init them. Overall clean up.
 */
 
 package frc.util;
