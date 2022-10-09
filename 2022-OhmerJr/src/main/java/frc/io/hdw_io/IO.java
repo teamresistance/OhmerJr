@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.hdw_io.util.CoorSys;
 import frc.io.hdw_io.util.NavX;
-import frc.io.hdw_io.util.Encoder_Neo;
-import frc.io.hdw_io.util.Encoder_Pwf;
+// import frc.io.hdw_io.util.Encoder_Neo;
+// import frc.io.hdw_io.util.Encoder_Pwf;
 import edu.wpi.first.wpilibj.SPI;
 import frc.io.hdw_io.util.Encoder_Tln;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -13,11 +13,11 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.*;
-import com.playingwithfusion.CANVenom;
-import com.playingwithfusion.CANVenom.BrakeCoastMode;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+// import com.playingwithfusion.CANVenom;
+// import com.playingwithfusion.CANVenom.BrakeCoastMode;
+// import com.revrobotics.CANSparkMax;
+// import com.revrobotics.CANSparkMax.IdleMode;
+// import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class IO {
     // PDP
@@ -46,25 +46,25 @@ public class IO {
     //public static Encoder_Neo WhlEncNeo_L = new Encoder_Neo(drvMtrNeo_L, 866.4);
     //public static Encoder_Neo WhlEncNeo_R = new Encoder_Neo(drvMtrNeo_R, 866.4);
 
-    public static CANSparkMax armMtrNeo_Lead = new CANSparkMax(10, MotorType.kBrushless); // Lead motor for arm rotation
-    public static CANSparkMax armMtrNeo_Foll = new CANSparkMax(11, MotorType.kBrushless); // Follower motor for arm rotation
+//     public static CANSparkMax armMtrNeo_Lead = new CANSparkMax(10, MotorType.kBrushless); // Lead motor for arm rotation
+//     public static CANSparkMax armMtrNeo_Foll = new CANSparkMax(11, MotorType.kBrushless); // Follower motor for arm rotation
 
-    public static Encoder_Neo armEncNeo_L = new Encoder_Neo(armMtrNeo_Lead, 866.4);
-    public static Encoder_Neo armEncNeo_F = new Encoder_Neo(armMtrNeo_Foll, 866.4);
+//     public static Encoder_Neo armEncNeo_L = new Encoder_Neo(armMtrNeo_Lead, 866.4);
+//     public static Encoder_Neo armEncNeo_F = new Encoder_Neo(armMtrNeo_Foll, 866.4);
 
-    //Test Venom brushless motor built-in controller from Playing With Fusion, PWF
-    public static CANVenom drvMtrPwf_L = new CANVenom(12); // Test drv mtr left whl
-    public static CANVenom drvMtrPwf_R = new CANVenom(13); // Test drv mtr right whl
-   // public static DifferentialDrive diffDrv_Pwf = new DifferentialDrive(drvMtrPwf_L, drvMtrPwf_R);
+//     //Test Venom brushless motor built-in controller from Playing With Fusion, PWF
+//     public static CANVenom drvMtrPwf_L = new CANVenom(12); // Test drv mtr left whl
+//     public static CANVenom drvMtrPwf_R = new CANVenom(13); // Test drv mtr right whl
+//    // public static DifferentialDrive diffDrv_Pwf = new DifferentialDrive(drvMtrPwf_L, drvMtrPwf_R);
 
-    public static Encoder_Pwf WhlEncPwf_L = new Encoder_Pwf(drvMtrPwf_L, 866.4);
-    public static Encoder_Pwf WhlEncPwf_R = new Encoder_Pwf(drvMtrPwf_R, 866.4);
+//     public static Encoder_Pwf WhlEncPwf_L = new Encoder_Pwf(drvMtrPwf_L, 866.4);
+//     public static Encoder_Pwf WhlEncPwf_R = new Encoder_Pwf(drvMtrPwf_R, 866.4);
 
-    public static CANVenom armMtrPwf_Lead = new CANVenom(14); // Lead motor for arm rotation
-    public static CANVenom armMtrPwf_Foll = new CANVenom(15); // Follower motor for arm rotation
+//     public static CANVenom armMtrPwf_Lead = new CANVenom(14); // Lead motor for arm rotation
+//     public static CANVenom armMtrPwf_Foll = new CANVenom(15); // Follower motor for arm rotation
 
-    public static Encoder_Pwf armEncPwf_L = new Encoder_Pwf(armMtrPwf_Lead, 866.4);
-    public static Encoder_Pwf armEncPwf_F = new Encoder_Pwf(armMtrPwf_Foll, 866.4);
+//     public static Encoder_Pwf armEncPwf_L = new Encoder_Pwf(armMtrPwf_Lead, 866.4);
+//     public static Encoder_Pwf armEncPwf_F = new Encoder_Pwf(armMtrPwf_Foll, 866.4);
 
     // Initialize any hardware here
     public static void init() {
@@ -96,28 +96,28 @@ public class IO {
         // drvMtrNeo_L.setInverted(false);
         // drvMtrNeo_R.setInverted(true);
 
-        armMtrNeo_Lead.restoreFactoryDefaults();
-        armMtrNeo_Foll.restoreFactoryDefaults();
-        armMtrNeo_Lead.setIdleMode(IdleMode.kBrake);
-        armMtrNeo_Foll.setIdleMode(IdleMode.kBrake);
-        armMtrNeo_Lead.setInverted(false);
-        armMtrNeo_Foll.setInverted(false);
-        armMtrNeo_Foll.follow(armMtrNeo_Lead);        
+        // armMtrNeo_Lead.restoreFactoryDefaults();
+        // armMtrNeo_Foll.restoreFactoryDefaults();
+        // armMtrNeo_Lead.setIdleMode(IdleMode.kBrake);
+        // armMtrNeo_Foll.setIdleMode(IdleMode.kBrake);
+        // armMtrNeo_Lead.setInverted(false);
+        // armMtrNeo_Foll.setInverted(false);
+        // armMtrNeo_Foll.follow(armMtrNeo_Lead);        
 
         // drvMtrPwf_L.restoreFactoryDefaults();
         // drvMtrPwf_R.restoreFactoryDefaults();
-        drvMtrPwf_L.setBrakeCoastMode(BrakeCoastMode.Brake);
-        drvMtrPwf_R.setBrakeCoastMode(BrakeCoastMode.Brake);
-        drvMtrPwf_L.setInverted(false);
-        drvMtrPwf_R.setInverted(true);
+        // drvMtrPwf_L.setBrakeCoastMode(BrakeCoastMode.Brake);
+        // drvMtrPwf_R.setBrakeCoastMode(BrakeCoastMode.Brake);
+        // drvMtrPwf_L.setInverted(false);
+        // drvMtrPwf_R.setInverted(true);
 
         // armMtrPwf_Lead.restoreFactoryDefaults();
         // armMtrPwf_Foll.restoreFactoryDefaults();
-        armMtrPwf_Lead.setBrakeCoastMode(BrakeCoastMode.Brake);
-        armMtrPwf_Foll.setBrakeCoastMode(BrakeCoastMode.Brake);
-        armMtrPwf_Lead.setInverted(false);
-        armMtrPwf_Foll.setInverted(true);
-        armMtrPwf_Foll.follow(armMtrPwf_Lead);        
+        // armMtrPwf_Lead.setBrakeCoastMode(BrakeCoastMode.Brake);
+        // armMtrPwf_Foll.setBrakeCoastMode(BrakeCoastMode.Brake);
+        // armMtrPwf_Lead.setInverted(false);
+        // armMtrPwf_Foll.setInverted(true);
+        // armMtrPwf_Foll.follow(armMtrPwf_Lead);        
 
     }
 
