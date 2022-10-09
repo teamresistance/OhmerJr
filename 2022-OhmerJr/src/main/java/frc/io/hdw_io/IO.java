@@ -134,7 +134,7 @@ public class IO {
     public static void sdbUpdate() {
         SmartDashboard.putNumber("Coor/X", coorXY.getX());
         SmartDashboard.putNumber("Coor/Y", coorXY.getY());
-        coorXY.setXY_OS(SmartDashboard.getNumber("Coor/X_OS", 0), SmartDashboard.getNumber("Coor/Y_OS", 0));
+        //coorXY.setXY_OS(SmartDashboard.getNumber("Coor/X_OS", 0), SmartDashboard.getNumber("Coor/Y_OS", 0));
         SmartDashboard.putNumber("Coor/EncoderL", drvTSRX_L.getSelectedSensorPosition());
         SmartDashboard.putNumber("Coor/EncoderR", drvTSRX_R.getSelectedSensorPosition());
         if (SmartDashboard.getBoolean("Coor/Reset", false)) {
@@ -148,7 +148,8 @@ public class IO {
         SmartDashboard.putNumber("NavX/Heading Raw Z", navX.getRawGyroZ());//Z raw vel deg/sec
         SmartDashboard.putNumber("NavX/Pitch", navX.getPitch());  //X? -180 to 180
         SmartDashboard.putNumber("NavX/Roll", navX.getRoll());   //X? -180 to 180
-        navX.setAngleAdjustment(SmartDashboard.getNumber("NavX/Angle Adj", 0));
+        SmartDashboard.putNumber("NavX/Angle Adj",navX.getAngleAdjustment());
+        //navX.setAngleAdjustment(SmartDashboard.getNumber("NavX/Angle Adj", 0));
         if (SmartDashboard.getBoolean("Coor/distanceReset", false)) {
             coorXY.drvFeetRst();
             SmartDashboard.putBoolean("Coor/distanceReset", false);
